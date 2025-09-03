@@ -103,7 +103,67 @@ export default function AdminEvents() {
               <option value="completed">Completed</option>
             </select>
             <input type="file" accept="image/*" onChange={(e) => setForm({ ...form, banner: e.target.files?.[0] || null })} />
-            <div className="flex gap-2">
+
+            <div>
+              <div className="flex items-center justify-between mt-2">
+                <h4 className="font-medium">Speakers</h4>
+                <button
+                  type="button"
+                  className="rounded-md border px-2 py-1 text-sm"
+                  onClick={() => setForm({ ...form, speakers: [...form.speakers, { id: crypto.randomUUID(), name: "", title: "", company: "", bio: "", image: "", linkedin: "" }] })}
+                >
+                  Add speaker
+                </button>
+              </div>
+              <div className="mt-2 space-y-3">
+                {form.speakers.map((s, idx) => (
+                  <div key={s.id} className="rounded-md border p-3 space-y-2">
+                    <div className="grid grid-cols-2 gap-2">
+                      <input className="rounded-md border bg-background px-3 py-2" placeholder="Name" value={s.name} onChange={(e) => {
+                        const speakers = [...form.speakers];
+                        speakers[idx] = { ...s, name: e.target.value };
+                        setForm({ ...form, speakers });
+                      }} />
+                      <input className="rounded-md border bg-background px-3 py-2" placeholder="Title" value={s.title} onChange={(e) => {
+                        const speakers = [...form.speakers];
+                        speakers[idx] = { ...s, title: e.target.value };
+                        setForm({ ...form, speakers });
+                      }} />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <input className="rounded-md border bg-background px-3 py-2" placeholder="Company" value={s.company} onChange={(e) => {
+                        const speakers = [...form.speakers];
+                        speakers[idx] = { ...s, company: e.target.value };
+                        setForm({ ...form, speakers });
+                      }} />
+                      <input className="rounded-md border bg-background px-3 py-2" placeholder="LinkedIn URL" value={s.linkedin || ""} onChange={(e) => {
+                        const speakers = [...form.speakers];
+                        speakers[idx] = { ...s, linkedin: e.target.value } as any;
+                        setForm({ ...form, speakers });
+                      }} />
+                    </div>
+                    <input className="w-full rounded-md border bg-background px-3 py-2" placeholder="Image URL" value={s.image || ""} onChange={(e) => {
+                      const speakers = [...form.speakers];
+                      speakers[idx] = { ...s, image: e.target.value } as any;
+                      setForm({ ...form, speakers });
+                    }} />
+                    <textarea className="w-full rounded-md border bg-background px-3 py-2" placeholder="Bio" value={s.bio} onChange={(e) => {
+                      const speakers = [...form.speakers];
+                      speakers[idx] = { ...s, bio: e.target.value };
+                      setForm({ ...form, speakers });
+                    }} />
+                    <div className="flex justify-end">
+                      <button type="button" className="rounded-md border px-2 py-1 text-sm hover:bg-red-50 text-red-600" onClick={() => {
+                        const speakers = form.speakers.filter((x) => x.id !== s.id);
+                        setForm({ ...form, speakers });
+                      }}>Remove</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-2 mt-3">
               <button className="rounded-md bg-primary px-4 py-2 text-primary-foreground" onClick={handleSubmit}>{editingId ? "Update" : "Create"}</button>
               <button className="rounded-md border px-4 py-2" onClick={resetForm}>Reset</button>
             </div>
