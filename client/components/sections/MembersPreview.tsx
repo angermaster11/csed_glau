@@ -25,6 +25,30 @@ const members: Member[] = [
     avatar:
       "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=400&auto=format&fit=crop",
   },
+  {
+    name: "Neha Kapoor",
+    role: "Design Lead",
+    avatar:
+      "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=400&auto=format&fit=crop",
+  },
+  {
+    name: "Sandeep Yadav",
+    role: "Tech Lead",
+    avatar:
+      "https://images.unsplash.com/photo-1548142813-c348350df52b?q=80&w=400&auto=format&fit=crop",
+  },
+  {
+    name: "Ishita Rao",
+    role: "Community Manager",
+    avatar:
+      "https://images.unsplash.com/photo-1544006659-f0b21884ce1d?q=80&w=400&auto=format&fit=crop",
+  },
+  {
+    name: "Kunal Singh",
+    role: "Marketing",
+    avatar:
+      "https://images.unsplash.com/photo-1541534401786-2077eed87a72?q=80&w=400&auto=format&fit=crop",
+  },
 ];
 
 export default function MembersPreview() {
