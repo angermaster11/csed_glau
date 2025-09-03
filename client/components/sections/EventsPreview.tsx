@@ -43,38 +43,42 @@ export default function EventsPreview() {
         </Link>
       </div>
       <div className="overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="flex gap-6 snap-x snap-mandatory">
-          {events.map((e) => (
-            <Link
-              key={e.id}
-              to={`/events/${e.id}`}
-              className="min-w-[320px] sm:min-w-[380px] max-w-[420px] snap-start group rounded-xl overflow-hidden border bg-card hover:shadow-lg transition"
-            >
-              <div className="aspect-[16/10] overflow-hidden">
-                <img
-                  src={e.image}
-                  alt={e.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                />
-              </div>
-              <div className="p-4">
-                <div className="text-xs uppercase tracking-wider text-indigo-600 font-semibold">
-                  {e.date}
+        {events.length === 0 ? (
+          <div className="text-sm text-muted-foreground">No events to show.</div>
+        ) : (
+          <div className="flex gap-6 snap-x snap-mandatory">
+            {events.map((e) => (
+              <Link
+                key={e.id}
+                to={`/events/${e.id}`}
+                className="min-w-[320px] sm:min-w-[380px] max-w-[420px] snap-start group rounded-xl overflow-hidden border bg-card hover:shadow-lg transition"
+              >
+                <div className="aspect-[16/10] overflow-hidden">
+                  <img
+                    src={e.image}
+                    alt={e.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  />
                 </div>
-                <h3 className="mt-1 font-semibold">{e.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
-                  {e.summary}
-                </p>
-                {e.price != null && (
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="font-bold">₹{(e.price / 100).toFixed(2)}</span>
-                    <span className="text-sm text-primary">Buy ticket →</span>
+                <div className="p-4">
+                  <div className="text-xs uppercase tracking-wider text-indigo-600 font-semibold">
+                    {e.date}
                   </div>
-                )}
-              </div>
-            </Link>
-          ))}
-        </div>
+                  <h3 className="mt-1 font-semibold">{e.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                    {e.summary}
+                  </p>
+                  {e.price != null && (
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="font-bold">₹{(e.price / 100).toFixed(2)}</span>
+                      <span className="text-sm text-primary">Buy ticket →</span>
+                    </div>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
