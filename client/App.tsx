@@ -14,6 +14,7 @@ import EventDetails from "@/pages/EventDetails";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import EventsList from "@/pages/EventsList";
+import AdminEvents from "@/pages/AdminEvents";
 
 const queryClient = new QueryClient();
 
