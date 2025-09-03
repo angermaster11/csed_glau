@@ -34,21 +34,23 @@ export default function MembersPreview() {
       <p className="text-muted-foreground mt-2">
         Meet the leaders driving CSED forward.
       </p>
-      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {members.map((m) => (
-          <div
-            key={m.name}
-            className="rounded-xl border bg-card p-6 text-center hover:shadow-lg transition"
-          >
-            <img
-              src={m.avatar}
-              alt={m.name}
-              className="mx-auto h-24 w-24 rounded-full object-cover"
-            />
-            <h3 className="mt-4 font-semibold">{m.name}</h3>
-            <p className="text-sm text-muted-foreground">{m.role}</p>
-          </div>
-        ))}
+      <div className="mt-8 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex gap-6 snap-x snap-mandatory">
+          {members.map((m) => (
+            <div
+              key={m.name}
+              className="min-w-[240px] snap-start rounded-xl border bg-card p-6 text-center hover:shadow-lg transition"
+            >
+              <img
+                src={m.avatar}
+                alt={m.name}
+                className="mx-auto h-24 w-24 rounded-full object-cover"
+              />
+              <h3 className="mt-4 font-semibold">{m.name}</h3>
+              <p className="text-sm text-muted-foreground">{m.role}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
