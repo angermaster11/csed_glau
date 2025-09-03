@@ -13,6 +13,7 @@ import Placeholder from "@/pages/Placeholder";
 import EventDetails from "@/pages/EventDetails";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
+import EventsList from "@/pages/EventsList";
 
 const queryClient = new QueryClient();
 
