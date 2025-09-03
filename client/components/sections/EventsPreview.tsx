@@ -36,7 +36,8 @@ function mapApiToCard(e: ApiEvent): EventCard {
 
 export default function EventsPreview() {
   const { data } = useQuery({ queryKey: ["events","preview"], queryFn: fetchEvents });
-  const events: EventCard[] = (data && data.length > 0) ? data.map(mapApiToCard) : sampleEvents;
+  const list = Array.isArray(data) ? data : [];
+  const events: EventCard[] = list.length > 0 ? list.map(mapApiToCard) : sampleEvents;
   return (
     <section id="events" className="container mx-auto py-16 md:py-24">
       <div className="flex items-end justify-between mb-8">
