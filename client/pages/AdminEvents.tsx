@@ -180,7 +180,7 @@ export default function AdminEvents() {
                   <div>
                     <div className="font-semibold">{e.title}</div>
                     <div className="text-sm text-muted-foreground">{e.date} {e.time} • {e.venue}</div>
-                    <div className="text-xs text-muted-foreground">{e.status}</div>
+                    <div className="text-xs text-muted-foreground">{e.status} • {e.speakers?.length || 0} speaker(s)</div>
                   </div>
                 </div>
                 <div className="flex gap-2">
