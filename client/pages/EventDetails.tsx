@@ -35,7 +35,7 @@ export default function EventDetails() {
     }
     try {
       setSubmitting(true);
-      const rupees = (event as any).price ? Math.max(1, Math.round((event as any).price / 100)) : 1;
+      const rupees = (event as any).amount ? Math.max(1, Number((event as any).amount)) : 1;
       const order = await createTicketOrder(event._id, {
         name: buyer.name,
         email: buyer.email,
@@ -96,6 +96,7 @@ export default function EventDetails() {
                 <div>Category: {event.category}</div>
                 <div>Status: {event.status}</div>
                 <div>Capacity: {event.capacity}</div>
+                <div>Price: ₹{(event as any).amount ?? 0}</div>
               </div>
               <div className="mt-6 prose prose-sm dark:prose-invert">
                 <p>{event.description}</p>
