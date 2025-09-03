@@ -104,8 +104,8 @@ export default function EventDetails() {
             </div>
           </div>
         </div>
-        <div className="space-y-6">
-          <div className="rounded-xl border p-6 sticky top-24">
+        <div className="space-y-6 lg:sticky lg:top-24 lg:z-10">
+          <div className="rounded-xl border p-6">
             <h3 className="font-semibold">Book this event</h3>
             <div className="mt-4 space-y-3">
               <input className="w-full rounded-md border bg-background px-3 py-2" placeholder="Full name" value={buyer.name} onChange={(e) => setBuyer({ ...buyer, name: e.target.value })} />
