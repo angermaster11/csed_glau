@@ -1,7 +1,13 @@
 import { defineConfig, Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { createServer } from "./server";
+
+// Only import server utilities if in dev mode
+let createServer: (() => any) | undefined;
+if (process.env.NODE_ENV === "development") {
+  // dynamic import so build on Vercel won’t fail
+  createServer = require("./server").createServer;
+}
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -16,7 +22,10 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: "dist/spa",
   },
-  plugins: [react(), expressPlugin()],
+  plugins: [
+    react(),
+    mode === "development" && expressPlugin(), // use Express only in dev
+  ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client"),
@@ -28,12 +37,12 @@ export default defineConfig(({ mode }) => ({
 function expressPlugin(): Plugin {
   return {
     name: "express-plugin",
-    apply: "serve", // Only apply during development (serve mode)
+    apply: "serve", // Only apply during dev
     configureServer(server) {
-      const app = createServer();
-
-      // Add Express app as middleware to Vite dev server
-      server.middlewares.use(app);
+      if (createServer) {
+        const app = createServer();
+        server.middlewares.use(app);
+      }
     },
   };
 }
