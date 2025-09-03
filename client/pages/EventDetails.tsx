@@ -32,10 +32,11 @@ export default function EventDetails() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      const order = (await res.json()) as CreateOrderResponse | { error: string };
-      if (!res.ok || (order as any).error) {
-        throw new Error((order as any).error || "Order creation failed");
+      const json = (await res.json()) as CreateOrderResponse | { error: string };
+      if (!res.ok || (json as any).error) {
+        throw new Error((json as any).error || "Order creation failed");
       }
+      const order = json as CreateOrderResponse;
 
       openRazorpayCheckout({
         key: order.keyId,
