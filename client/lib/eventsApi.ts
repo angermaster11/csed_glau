@@ -27,14 +27,14 @@ export type ApiEvent = {
 };
 
 export async function fetchEvents(): Promise<ApiEvent[]> {
-  const { data } = await api.get("/api/events");
+  const { data } = await api.get("/api/events/events");
   if (Array.isArray(data)) return data as ApiEvent[];
   if (data && Array.isArray((data as any).events)) return (data as any).events as ApiEvent[];
   return [];
 }
 
 export async function fetchEvent(id: string): Promise<ApiEvent> {
-  const { data } = await api.get<ApiEvent>(`/api/events/${id}`);
+  const { data } = await api.get<ApiEvent>(`/api/events/events/${id}`);
   return data;
 }
 
@@ -70,7 +70,7 @@ function toFormData(input: UpsertEventInput) {
 
 export async function createEvent(input: UpsertEventInput) {
   const fd = toFormData(input);
-  const { data } = await api.post<{ id: string; message: string }>("/api/events", fd, {
+  const { data } = await api.post<{ id: string; message: string }>("/api/events/events", fd, {
     headers: { "Content-Type": "multipart/form-data" },
   });
   return data;
@@ -78,13 +78,13 @@ export async function createEvent(input: UpsertEventInput) {
 
 export async function updateEvent(id: string, input: UpsertEventInput) {
   const fd = toFormData(input);
-  const { data } = await api.put<{ message: string }>(`/api/events/${id}`, fd, {
+  const { data } = await api.put<{ message: string }>(`/api/events/events/${id}`, fd, {
     headers: { "Content-Type": "multipart/form-data" },
   });
   return data;
 }
 
 export async function deleteEvent(id: string) {
-  const { data } = await api.delete<{ message: string }>(`/api/events/${id}`);
+  const { data } = await api.delete<{ message: string }>(`/api/events/events/${id}`);
   return data;
 }
