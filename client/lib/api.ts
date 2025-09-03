@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://82b405a8b7de.ngrok-free.app";
+export const BASE_URL = "https://82b405a8b7de.ngrok-free.app";
 const TOKEN_KEY = "csed_access_token";
 
 export function getToken() {
