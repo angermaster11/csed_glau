@@ -301,35 +301,20 @@ export default function AdminDashboard() {
 
       {tab === "audits" && (
         <div className="mt-6">
-          <SectionCard title="Audit Log">
+          <SectionCard title="Audit Log" action={<button className="rounded-md border px-3 py-1" onClick={() => { clearAudits(); setAudits([]); }}>Clear</button>}>
             <div className="space-y-3">
-              {state.audits.length === 0 && (
-                <div className="text-sm text-muted-foreground">
-                  No changes yet.
-                </div>
+              {audits.length === 0 && (
+                <div className="text-sm text-muted-foreground">No changes yet.</div>
               )}
-              {state.audits.map((a) => (
-                <div
-                  key={a.id}
-                  className="rounded-md border p-3 flex items-center justify-between"
-                >
+              {audits.map((a) => (
+                <div key={a.id} className="rounded-md border p-3 flex items-center justify-between">
                   <div>
                     <div className="text-sm">
-                      <span className="font-medium">{a.actor}</span> {a.action}{" "}
-                      {a.entity}{" "}
-                      <span className="text-xs text-muted-foreground">
-                        ({a.entityId})
-                      </span>
+                      <span className="font-medium">{a.actor || "admin"}</span> {a.action} {a.entity} <span className="text-xs text-muted-foreground">({a.entityId || ""})</span>
                     </div>
-                    {a.details && (
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {a.details}
-                      </div>
-                    )}
+                    {a.details && <div className="text-xs text-muted-foreground mt-1">{a.details}</div>}
                   </div>
-                  <div className="text-xs text-muted-foreground">
-                    {new Date(a.timestamp).toLocaleString()}
-                  </div>
+                  <div className="text-xs text-muted-foreground">{new Date(a.ts).toLocaleString()}</div>
                 </div>
               ))}
             </div>
