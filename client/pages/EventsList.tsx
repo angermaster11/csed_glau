@@ -36,7 +36,7 @@ export default function EventsList() {
               {e.image && <img src={e.image} alt={e.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />}
             </div>
             <div className="p-4">
-              <div className="text-xs uppercase tracking-wider text-indigo-600 font-semibold">{new Date(e.date).toLocaleDateString()}</div>
+              <div className="text-xs uppercase tracking-wider text-indigo-600 font-semibold">{e.date}</div>
               <h3 className="mt-1 font-semibold">{e.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{e.summary}</p>
             </div>
