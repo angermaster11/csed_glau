@@ -1,15 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEvent, type ApiEvent } from "@/lib/eventsApi";
+import { useToast } from "@/hooks/use-toast";
 
 export default function EventDetails() {
   const { id } = useParams<{ id: string }>();
+  const { toast } = useToast();
   const { data, isLoading, error, refetch } = useQuery<ApiEvent>({
     queryKey: ["event", id],
     queryFn: () => fetchEvent(id as string),
     enabled: Boolean(id),
   });
+
+  const [buyer, setBuyer] = useState({ name: "", email: "", phone: "", designation: "" });
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (id) refetch();
@@ -19,6 +24,24 @@ export default function EventDetails() {
   if (error || !data) return <div className="container mx-auto py-12">Event not found</div>;
 
   const event = data;
+
+  const handleBook = async () => {
+    if (!buyer.name || !buyer.email) {
+      toast({ title: "Please fill name and email", variant: "destructive" });
+      return;
+    }
+    try {
+      setSubmitting(true);
+      // Placeholder booking flow: integrate with your backend when available
+      await new Promise((r) => setTimeout(r, 600));
+      toast({ title: "Booked", description: `${buyer.name} booked ${event.title}` });
+      setBuyer({ name: "", email: "", phone: "", designation: "" });
+    } catch (e: any) {
+      toast({ title: "Booking failed", description: e?.message || "Try again" , variant: "destructive"});
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="container mx-auto py-12">
@@ -52,8 +75,21 @@ export default function EventDetails() {
             </div>
           </div>
         </div>
-        <div>
+        <div className="space-y-6">
           <div className="rounded-xl border p-6 sticky top-24">
+            <h3 className="font-semibold">Book this event</h3>
+            <div className="mt-4 space-y-3">
+              <input className="w-full rounded-md border bg-background px-3 py-2" placeholder="Full name" value={buyer.name} onChange={(e) => setBuyer({ ...buyer, name: e.target.value })} />
+              <input className="w-full rounded-md border bg-background px-3 py-2" placeholder="Email" type="email" value={buyer.email} onChange={(e) => setBuyer({ ...buyer, email: e.target.value })} />
+              <input className="w-full rounded-md border bg-background px-3 py-2" placeholder="Phone" value={buyer.phone} onChange={(e) => setBuyer({ ...buyer, phone: e.target.value })} />
+              <input className="w-full rounded-md border bg-background px-3 py-2" placeholder="Designation" value={buyer.designation} onChange={(e) => setBuyer({ ...buyer, designation: e.target.value })} />
+              <button onClick={handleBook} disabled={submitting} className="w-full rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 disabled:opacity-60">
+                {submitting ? "Booking..." : "Book"}
+              </button>
+            </div>
+          </div>
+
+          <div className="rounded-xl border p-6">
             <h3 className="font-semibold">Speakers</h3>
             <div className="mt-4 grid gap-4">
               {(event.speakers || []).map((s) => (
