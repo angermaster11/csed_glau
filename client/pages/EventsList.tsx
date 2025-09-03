@@ -1,23 +1,25 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { sampleEvents } from "@/components/sections/EventsPreview";
+import { useQuery } from "@tanstack/react-query";
+import { fetchEvents, type ApiEvent } from "@/lib/eventsApi";
 
 export default function EventsList() {
   const [q, setQ] = useState("");
+  const { data } = useQuery<ApiEvent[]>({ queryKey: ["events", "list"], queryFn: fetchEvents });
+  const list = Array.isArray(data) ? data : [];
   const filtered = useMemo(() => {
     const t = q.toLowerCase().trim();
-    if (!t) return sampleEvents;
-    return sampleEvents.filter(
-      (e) => e.title.toLowerCase().includes(t) || e.summary.toLowerCase().includes(t),
-    );
-  }, [q]);
+    const src = list.map((e) => ({ id: e._id, title: e.title, date: `${e.date} ${e.time}`, summary: e.summary || e.description, image: e.banner || "" }));
+    if (!t) return src;
+    return src.filter((e) => e.title.toLowerCase().includes(t) || e.summary.toLowerCase().includes(t));
+  }, [q, list]);
 
   return (
     <div className="container mx-auto py-12">
       <div className="flex items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold">All Events</h1>
-          <p className="text-muted-foreground">Browse and buy tickets to CSED events.</p>
+          <p className="text-muted-foreground">Browse upcoming and past events.</p>
         </div>
         <input
           placeholder="Search events..."
@@ -31,16 +33,12 @@ export default function EventsList() {
         {filtered.map((e) => (
           <Link key={e.id} to={`/events/${e.id}`} className="group rounded-xl overflow-hidden border bg-card hover:shadow-lg transition">
             <div className="aspect-[16/10] overflow-hidden">
-              <img src={e.image} alt={e.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              {e.image && <img src={e.image} alt={e.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />}
             </div>
             <div className="p-4">
               <div className="text-xs uppercase tracking-wider text-indigo-600 font-semibold">{new Date(e.date).toLocaleDateString()}</div>
               <h3 className="mt-1 font-semibold">{e.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{e.summary}</p>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="font-bold">₹{(e.price / 100).toFixed(2)}</span>
-                <span className="text-sm text-primary">Buy ticket →</span>
-              </div>
             </div>
           </Link>
         ))}
