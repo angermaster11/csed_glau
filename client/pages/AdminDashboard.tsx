@@ -1,28 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  AdminUser,
-  DashboardState,
-  loadState,
-  getCurrentUser,
-  setCurrentUser,
-  addMember,
-  updateMember,
-  deleteMember,
-  addProject,
-  updateProject,
-  deleteProject,
-  addEvent,
-  updateEvent,
-  deleteEvent,
-  addOrder,
-  Member,
-  Project,
-  ClubEvent,
-} from "@/lib/adminStore";
+import { AdminUser, DashboardState, loadState, getCurrentUser, setCurrentUser, addOrder, Member, Project, ClubEvent } from "@/lib/adminStore";
 import AdminEvents from "@/pages/AdminEvents";
 import AdminProjects from "@/pages/AdminProjects";
 import AdminMembers from "@/pages/AdminMembers";
+import { fetchMembers } from "@/lib/membersApi";
+import { fetchProjects } from "@/lib/projectsApi";
+import { fetchEvents } from "@/lib/eventsApi";
+import { getAudits, clearAudits, type AuditItem } from "@/lib/audit";
 
 function SectionCard({
   title,
@@ -87,15 +72,18 @@ export default function AdminDashboard() {
 
   const actor = user?.name || "Unknown";
 
-  const totals = useMemo(
-    () => ({
-      members: state.members.length,
-      projects: state.projects.length,
-      events: state.events.length,
-      buyers: state.orders.length,
-    }),
-    [state],
-  );
+  const [counts, setCounts] = useState({ members: 0, projects: 0, events: 0, buyers: 0 });
+  const [audits, setAudits] = useState<AuditItem[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const [m, p, e] = await Promise.all([fetchMembers(), fetchProjects(), fetchEvents()]);
+        setCounts({ members: m.length, projects: p.length, events: e.length, buyers: 0 });
+      } catch {}
+      setAudits(getAudits());
+    })();
+  }, [tab]);
 
   return (
     <div className="container mx-auto py-8">
@@ -143,16 +131,16 @@ export default function AdminDashboard() {
       {tab === "overview" && (
         <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <SectionCard title="Members">
-            <div className="text-3xl font-bold">{totals.members}</div>
+            <div className="text-3xl font-bold">{counts.members}</div>
           </SectionCard>
           <SectionCard title="Projects">
-            <div className="text-3xl font-bold">{totals.projects}</div>
+            <div className="text-3xl font-bold">{counts.projects}</div>
           </SectionCard>
           <SectionCard title="Events">
-            <div className="text-3xl font-bold">{totals.events}</div>
+            <div className="text-3xl font-bold">{counts.events}</div>
           </SectionCard>
           <SectionCard title="Ticket Buyers">
-            <div className="text-3xl font-bold">{totals.buyers}</div>
+            <div className="text-3xl font-bold">{counts.buyers}</div>
           </SectionCard>
         </div>
       )}
