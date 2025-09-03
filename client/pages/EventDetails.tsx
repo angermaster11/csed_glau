@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEvent, type ApiEvent } from "@/lib/eventsApi";
 import { useToast } from "@/hooks/use-toast";
+import { loadRazorpay, openRazorpayCheckout } from "@/lib/razorpay";
+import { createTicketOrder, verifyPayment } from "@/lib/ticketsApi";
 
 export default function EventDetails() {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +20,7 @@ export default function EventDetails() {
 
   useEffect(() => {
     if (id) refetch();
+    loadRazorpay().catch(() => {});
   }, [id, refetch]);
 
   if (isLoading) return <div className="container mx-auto py-12">Loading...</div>;
@@ -32,13 +35,38 @@ export default function EventDetails() {
     }
     try {
       setSubmitting(true);
-      // Placeholder booking flow: integrate with your backend when available
-      await new Promise((r) => setTimeout(r, 600));
-      toast({ title: "Booked", description: `${buyer.name} booked ${event.title}` });
-      setBuyer({ name: "", email: "", phone: "", designation: "" });
+      const rupees = (event as any).price ? Math.max(1, Math.round((event as any).price / 100)) : 1;
+      const order = await createTicketOrder(event._id, {
+        name: buyer.name,
+        email: buyer.email,
+        phone: buyer.phone,
+        designation: buyer.designation,
+        amount: rupees,
+      });
+
+      openRazorpayCheckout({
+        key: order.razorpay_key,
+        amount: order.amount,
+        currency: order.currency,
+        name: "CSED Club",
+        description: event.title,
+        order_id: order.order_id,
+        prefill: { name: buyer.name, email: buyer.email, contact: buyer.phone },
+        theme: { color: "#4f46e5" },
+        handler: async (resp) => {
+          try {
+            const result = await verifyPayment(resp.razorpay_payment_id, resp.razorpay_order_id, resp.razorpay_signature);
+            toast({ title: "Payment success", description: result.message });
+            setBuyer({ name: "", email: "", phone: "", designation: "" });
+          } catch (e: any) {
+            toast({ title: "Verification failed", description: e?.message || "Try again", variant: "destructive" });
+          } finally {
+            setSubmitting(false);
+          }
+        },
+      });
     } catch (e: any) {
-      toast({ title: "Booking failed", description: e?.message || "Try again" , variant: "destructive"});
-    } finally {
+      toast({ title: "Booking failed", description: e?.response?.data?.detail || e?.message || "Try again", variant: "destructive" });
       setSubmitting(false);
     }
   };
