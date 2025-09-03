@@ -88,8 +88,10 @@ export default function AdminEvents() {
       const payload = { ...form, time: form.time, speakers } as any;
       if (editingId) {
         await updateEvent(editingId, payload);
+        try { (await import("@/lib/audit")).recordAudit({ action: "update", entity: "event", entityId: editingId, details: `Updated ${form.title}` }); } catch {}
       } else {
-        await createEvent(payload);
+        const res = await createEvent(payload);
+        try { (await import("@/lib/audit")).recordAudit({ action: "create", entity: "event", entityId: (res as any)?.id, details: `Created ${form.title}` }); } catch {}
       }
       const list = await fetchEvents();
       setEvents(list);
@@ -103,6 +105,7 @@ export default function AdminEvents() {
     if (!confirm("Delete this event?")) return;
     try {
       await deleteEvent(id);
+      try { (await import("@/lib/audit")).recordAudit({ action: "delete", entity: "event", entityId: id, details: "Deleted event" }); } catch {}
       setEvents(await fetchEvents());
     } catch (e: any) {
       setError(e?.response?.data?.detail || e?.message || "Delete failed");
