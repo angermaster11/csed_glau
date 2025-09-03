@@ -50,8 +50,13 @@ export default function AdminProjects() {
     try {
       setError(null);
       const payload = { ...form };
-      if (editingId) await updateProject(editingId, payload as any);
-      else await createProject(payload as any);
+      if (editingId) {
+        await updateProject(editingId, payload as any);
+        try { (await import("@/lib/audit")).recordAudit({ action: "update", entity: "project", entityId: editingId, details: `Updated ${form.project_title || form.project_name}` }); } catch {}
+      } else {
+        const res = await createProject(payload as any);
+        try { (await import("@/lib/audit")).recordAudit({ action: "create", entity: "project", entityId: (res as any)?.id, details: `Created ${form.project_title || form.project_name}` }); } catch {}
+      }
       const list = await fetchProjects();
       setProjects(list);
       resetForm();
@@ -177,7 +182,7 @@ export default function AdminProjects() {
               </div>
               <div className="flex gap-2">
                 <button className="rounded-md border px-3 py-1" onClick={() => handleEdit(p._id)}>Edit</button>
-                <button className="rounded-md border px-3 py-1 hover:bg-red-50 text-red-600" onClick={async () => { if (!confirm("Delete this project?")) return; await deleteProject(p._id); setProjects(await fetchProjects()); }}>Delete</button>
+                <button className="rounded-md border px-3 py-1 hover:bg-red-50 text-red-600" onClick={async () => { if (!confirm("Delete this project?")) return; await deleteProject(p._id); try { (await import("@/lib/audit")).recordAudit({ action: "delete", entity: "project", entityId: p._id, details: `Deleted ${p.project_title || p.project_name}` }); } catch {} setProjects(await fetchProjects()); }}>Delete</button>
               </div>
             </div>
           ))}
