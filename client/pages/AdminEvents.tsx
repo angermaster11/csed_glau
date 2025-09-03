@@ -45,6 +45,7 @@ export default function AdminEvents() {
     category: "general",
     summary: "",
     status: "upcoming",
+    amount: 0,
     speakers: [] as LocalSpeaker[],
     banner: null as File | null,
   });
@@ -69,7 +70,7 @@ export default function AdminEvents() {
   const resetForm = () => {
     setEditingId(null);
     setBannerPreview(null);
-    setForm({ title: "", description: "", date: "", time: "", venue: "", capacity: 100, category: "general", summary: "", status: "upcoming", speakers: [], banner: null });
+    setForm({ title: "", description: "", date: "", time: "", venue: "", capacity: 100, category: "general", summary: "", status: "upcoming", amount: 0, speakers: [], banner: null });
   };
 
   const handleSubmit = async () => {
@@ -123,6 +124,7 @@ export default function AdminEvents() {
         category: e.category,
         summary: e.summary,
         status: e.status,
+        amount: (e as any).amount ?? 0,
         speakers: (e.speakers || []).map((s) => ({ ...s })),
         banner: null,
       });
@@ -170,7 +172,7 @@ export default function AdminEvents() {
               <label className="text-sm font-medium">Venue</label>
               <input className="w-full rounded-md border bg-background px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30" value={form.venue} onChange={(e) => setForm({ ...form, venue: e.target.value })} />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <div className="space-y-1">
                 <label className="text-sm font-medium">Capacity</label>
                 <input type="number" className="w-full rounded-md border bg-background px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30" value={form.capacity} onChange={(e) => setForm({ ...form, capacity: parseInt(e.target.value || "0", 10) })} />
@@ -178,6 +180,10 @@ export default function AdminEvents() {
               <div className="space-y-1">
                 <label className="text-sm font-medium">Category</label>
                 <input className="w-full rounded-md border bg-background px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
+              </div>
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Amount (₹)</label>
+                <input type="number" className="w-full rounded-md border bg-background px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30" value={form.amount} onChange={(e) => setForm({ ...form, amount: parseInt(e.target.value || "0", 10) })} />
               </div>
             </div>
             <div className="space-y-1">
@@ -287,7 +293,7 @@ export default function AdminEvents() {
                   <div>
                     <div className="font-semibold">{e.title}</div>
                     <div className="text-sm text-muted-foreground">{e.date} {e.time} • {e.venue}</div>
-                    <div className="text-xs text-muted-foreground">{e.status} • {e.speakers?.length || 0} speaker(s)</div>
+                    <div className="text-xs text-muted-foreground">{e.status} • ₹{(e as any).amount ?? 0} • {e.speakers?.length || 0} speaker(s)</div>
                   </div>
                 </div>
                 <div className="flex gap-2">
