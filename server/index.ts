@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { handleConfirmPayment, handleCreateOrder } from "./routes/razorpay";
 
 export function createServer() {
   const app = express();
@@ -18,6 +19,10 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Payments: Razorpay
+  app.post("/api/razorpay/create-order", handleCreateOrder);
+  app.post("/api/razorpay/confirm", handleConfirmPayment);
 
   return app;
 }
