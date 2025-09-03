@@ -21,6 +21,7 @@ import {
   ClubEvent,
 } from "@/lib/adminStore";
 import AdminEvents from "@/pages/AdminEvents";
+import AdminProjects from "@/pages/AdminProjects";
 
 function SectionCard({
   title,
