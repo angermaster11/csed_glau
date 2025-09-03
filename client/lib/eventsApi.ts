@@ -21,6 +21,7 @@ export type ApiEvent = {
   category: string;
   summary: string;
   status: string; // completed|upcoming
+  amount: number; // rupees
   banner?: string;
   speakers: ApiSpeaker[];
   created_at?: string;
@@ -67,6 +68,7 @@ export type UpsertEventInput = {
   category: string;
   summary: string;
   status: string;
+  amount: number; // rupees
   speakers: ApiSpeaker[];
   banner?: File | null;
 };
@@ -82,6 +84,7 @@ function toFormData(input: UpsertEventInput) {
   fd.set("category", input.category);
   fd.set("summary", input.summary);
   fd.set("status", input.status);
+  fd.set("amount", String(input.amount));
   fd.set("speakers", JSON.stringify(input.speakers ?? []));
   if (input.banner) fd.set("banner", input.banner);
   return fd;
