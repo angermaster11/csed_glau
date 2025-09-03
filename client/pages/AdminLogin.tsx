@@ -9,7 +9,9 @@ export default function AdminLogin() {
   return (
     <div className="container mx-auto max-w-md py-24">
       <h1 className="text-3xl font-bold">Admin Login</h1>
-      <p className="mt-2 text-muted-foreground">Enter your name to identify changes you make in the dashboard.</p>
+      <p className="mt-2 text-muted-foreground">
+        Enter your name to identify changes you make in the dashboard.
+      </p>
       <div className="mt-6 space-y-4">
         <input
           className="w-full rounded-md border bg-background px-3 py-2"

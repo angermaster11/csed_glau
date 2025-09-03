@@ -25,10 +25,34 @@ const App = () => (
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
-            <Route path="/events" element={<Placeholder title="Events" description="Browse all club events." />} />
+            <Route
+              path="/events"
+              element={
+                <Placeholder
+                  title="Events"
+                  description="Browse all club events."
+                />
+              }
+            />
             <Route path="/events/:id" element={<EventDetails />} />
-            <Route path="/projects" element={<Placeholder title="Projects" description="Explore student-led projects." />} />
-            <Route path="/members" element={<Placeholder title="Members" description="Meet the club members and leaders." />} />
+            <Route
+              path="/projects"
+              element={
+                <Placeholder
+                  title="Projects"
+                  description="Explore student-led projects."
+                />
+              }
+            />
+            <Route
+              path="/members"
+              element={
+                <Placeholder
+                  title="Members"
+                  description="Meet the club members and leaders."
+                />
+              }
+            />
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />

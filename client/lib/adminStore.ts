@@ -142,22 +142,60 @@ function saveState(state: DashboardState) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-function recordAudit(state: DashboardState, entry: Omit<AuditEntry, "id" | "timestamp">) {
-  state.audits.unshift({ id: crypto.randomUUID(), timestamp: new Date().toISOString(), ...entry });
+function recordAudit(
+  state: DashboardState,
+  entry: Omit<AuditEntry, "id" | "timestamp">,
+) {
+  state.audits.unshift({
+    id: crypto.randomUUID(),
+    timestamp: new Date().toISOString(),
+    ...entry,
+  });
 }
 
-export function addMember(state: DashboardState, actor: string, m: Omit<Member, "id" | "createdAt" | "createdBy">) {
-  const member: Member = { ...m, id: crypto.randomUUID(), createdAt: new Date().toISOString(), createdBy: actor };
+export function addMember(
+  state: DashboardState,
+  actor: string,
+  m: Omit<Member, "id" | "createdAt" | "createdBy">,
+) {
+  const member: Member = {
+    ...m,
+    id: crypto.randomUUID(),
+    createdAt: new Date().toISOString(),
+    createdBy: actor,
+  };
   state.members.unshift(member);
-  recordAudit(state, { actor, action: "create", entity: "member", entityId: member.id, details: `Added ${member.name}` });
+  recordAudit(state, {
+    actor,
+    action: "create",
+    entity: "member",
+    entityId: member.id,
+    details: `Added ${member.name}`,
+  });
   saveState(state);
 }
 
-export function updateMember(state: DashboardState, actor: string, id: string, patch: Partial<Member>) {
+export function updateMember(
+  state: DashboardState,
+  actor: string,
+  id: string,
+  patch: Partial<Member>,
+) {
   const idx = state.members.findIndex((x) => x.id === id);
   if (idx >= 0) {
-    state.members[idx] = { ...state.members[idx], ...patch, updatedAt: new Date().toISOString(), updatedBy: actor };
-    recordAudit(state, { actor, action: "update", entity: "member", entityId: id, details: `Updated ${state.members[idx].name}` });
+    state.members[idx] = {
+      ...state.members[idx],
+      ...patch,
+      updatedAt: new Date().toISOString(),
+      updatedBy: actor,
+    };
+    recordAudit(state, {
+      actor,
+      action: "update",
+      entity: "member",
+      entityId: id,
+      details: `Updated ${state.members[idx].name}`,
+    });
     saveState(state);
   }
 }
@@ -167,49 +205,127 @@ export function deleteMember(state: DashboardState, actor: string, id: string) {
   if (idx >= 0) {
     const name = state.members[idx].name;
     state.members.splice(idx, 1);
-    recordAudit(state, { actor, action: "delete", entity: "member", entityId: id, details: `Deleted ${name}` });
+    recordAudit(state, {
+      actor,
+      action: "delete",
+      entity: "member",
+      entityId: id,
+      details: `Deleted ${name}`,
+    });
     saveState(state);
   }
 }
 
-export function addProject(state: DashboardState, actor: string, p: Omit<Project, "id" | "createdAt" | "createdBy">) {
-  const project: Project = { ...p, id: crypto.randomUUID(), createdAt: new Date().toISOString(), createdBy: actor };
+export function addProject(
+  state: DashboardState,
+  actor: string,
+  p: Omit<Project, "id" | "createdAt" | "createdBy">,
+) {
+  const project: Project = {
+    ...p,
+    id: crypto.randomUUID(),
+    createdAt: new Date().toISOString(),
+    createdBy: actor,
+  };
   state.projects.unshift(project);
-  recordAudit(state, { actor, action: "create", entity: "project", entityId: project.id, details: `Added ${project.title}` });
+  recordAudit(state, {
+    actor,
+    action: "create",
+    entity: "project",
+    entityId: project.id,
+    details: `Added ${project.title}`,
+  });
   saveState(state);
 }
 
-export function updateProject(state: DashboardState, actor: string, id: string, patch: Partial<Project>) {
+export function updateProject(
+  state: DashboardState,
+  actor: string,
+  id: string,
+  patch: Partial<Project>,
+) {
   const idx = state.projects.findIndex((x) => x.id === id);
   if (idx >= 0) {
-    state.projects[idx] = { ...state.projects[idx], ...patch, updatedAt: new Date().toISOString(), updatedBy: actor };
-    recordAudit(state, { actor, action: "update", entity: "project", entityId: id, details: `Updated ${state.projects[idx].title}` });
+    state.projects[idx] = {
+      ...state.projects[idx],
+      ...patch,
+      updatedAt: new Date().toISOString(),
+      updatedBy: actor,
+    };
+    recordAudit(state, {
+      actor,
+      action: "update",
+      entity: "project",
+      entityId: id,
+      details: `Updated ${state.projects[idx].title}`,
+    });
     saveState(state);
   }
 }
 
-export function deleteProject(state: DashboardState, actor: string, id: string) {
+export function deleteProject(
+  state: DashboardState,
+  actor: string,
+  id: string,
+) {
   const idx = state.projects.findIndex((x) => x.id === id);
   if (idx >= 0) {
     const title = state.projects[idx].title;
     state.projects.splice(idx, 1);
-    recordAudit(state, { actor, action: "delete", entity: "project", entityId: id, details: `Deleted ${title}` });
+    recordAudit(state, {
+      actor,
+      action: "delete",
+      entity: "project",
+      entityId: id,
+      details: `Deleted ${title}`,
+    });
     saveState(state);
   }
 }
 
-export function addEvent(state: DashboardState, actor: string, e: Omit<ClubEvent, "id" | "createdAt" | "createdBy">) {
-  const ev: ClubEvent = { ...e, id: crypto.randomUUID(), createdAt: new Date().toISOString(), createdBy: actor };
+export function addEvent(
+  state: DashboardState,
+  actor: string,
+  e: Omit<ClubEvent, "id" | "createdAt" | "createdBy">,
+) {
+  const ev: ClubEvent = {
+    ...e,
+    id: crypto.randomUUID(),
+    createdAt: new Date().toISOString(),
+    createdBy: actor,
+  };
   state.events.unshift(ev);
-  recordAudit(state, { actor, action: "create", entity: "event", entityId: ev.id, details: `Added ${ev.title}` });
+  recordAudit(state, {
+    actor,
+    action: "create",
+    entity: "event",
+    entityId: ev.id,
+    details: `Added ${ev.title}`,
+  });
   saveState(state);
 }
 
-export function updateEvent(state: DashboardState, actor: string, id: string, patch: Partial<ClubEvent>) {
+export function updateEvent(
+  state: DashboardState,
+  actor: string,
+  id: string,
+  patch: Partial<ClubEvent>,
+) {
   const idx = state.events.findIndex((x) => x.id === id);
   if (idx >= 0) {
-    state.events[idx] = { ...state.events[idx], ...patch, updatedAt: new Date().toISOString(), updatedBy: actor };
-    recordAudit(state, { actor, action: "update", entity: "event", entityId: id, details: `Updated ${state.events[idx].title}` });
+    state.events[idx] = {
+      ...state.events[idx],
+      ...patch,
+      updatedAt: new Date().toISOString(),
+      updatedBy: actor,
+    };
+    recordAudit(state, {
+      actor,
+      action: "update",
+      entity: "event",
+      entityId: id,
+      details: `Updated ${state.events[idx].title}`,
+    });
     saveState(state);
   }
 }
@@ -219,15 +335,35 @@ export function deleteEvent(state: DashboardState, actor: string, id: string) {
   if (idx >= 0) {
     const title = state.events[idx].title;
     state.events.splice(idx, 1);
-    recordAudit(state, { actor, action: "delete", entity: "event", entityId: id, details: `Deleted ${title}` });
+    recordAudit(state, {
+      actor,
+      action: "delete",
+      entity: "event",
+      entityId: id,
+      details: `Deleted ${title}`,
+    });
     saveState(state);
   }
 }
 
-export function addOrder(state: DashboardState, actor: string, o: Omit<OrderBuyer, "id" | "createdAt">) {
-  const order: OrderBuyer = { ...o, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+export function addOrder(
+  state: DashboardState,
+  actor: string,
+  o: Omit<OrderBuyer, "id" | "createdAt">,
+) {
+  const order: OrderBuyer = {
+    ...o,
+    id: crypto.randomUUID(),
+    createdAt: new Date().toISOString(),
+  };
   state.orders.unshift(order);
-  recordAudit(state, { actor, action: "create", entity: "order", entityId: order.id, details: `Recorded order for ${order.buyerName}` });
+  recordAudit(state, {
+    actor,
+    action: "create",
+    entity: "order",
+    entityId: order.id,
+    details: `Recorded order for ${order.buyerName}`,
+  });
   saveState(state);
 }
 

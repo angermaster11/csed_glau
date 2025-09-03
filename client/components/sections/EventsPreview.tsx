@@ -34,7 +34,8 @@ export const sampleEvents: EventCard[] = [
     title: "Design Sprint Weekend",
     date: "2026-01-20",
     price: 19900,
-    summary: "Build rapid prototypes and validate ideas with users in 48 hours.",
+    summary:
+      "Build rapid prototypes and validate ideas with users in 48 hours.",
     image:
       "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1600&auto=format&fit=crop",
   },
@@ -46,20 +47,39 @@ export default function EventsPreview() {
       <div className="flex items-end justify-between mb-8">
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold">Upcoming Events</h2>
-          <p className="text-muted-foreground mt-2">Learn, build and network with peers and mentors.</p>
+          <p className="text-muted-foreground mt-2">
+            Learn, build and network with peers and mentors.
+          </p>
         </div>
-        <Link to="/events" className="hidden md:inline-flex items-center rounded-md border px-4 py-2 hover:bg-accent transition">All events</Link>
+        <Link
+          to="/events"
+          className="hidden md:inline-flex items-center rounded-md border px-4 py-2 hover:bg-accent transition"
+        >
+          All events
+        </Link>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {sampleEvents.map((e) => (
-          <Link key={e.id} to={`/events/${e.id}`} className="group rounded-xl overflow-hidden border bg-card hover:shadow-lg transition">
+          <Link
+            key={e.id}
+            to={`/events/${e.id}`}
+            className="group rounded-xl overflow-hidden border bg-card hover:shadow-lg transition"
+          >
             <div className="aspect-[16/10] overflow-hidden">
-              <img src={e.image} alt={e.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <img
+                src={e.image}
+                alt={e.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              />
             </div>
             <div className="p-4">
-              <div className="text-xs uppercase tracking-wider text-indigo-600 font-semibold">{new Date(e.date).toLocaleDateString()}</div>
+              <div className="text-xs uppercase tracking-wider text-indigo-600 font-semibold">
+                {new Date(e.date).toLocaleDateString()}
+              </div>
               <h3 className="mt-1 font-semibold">{e.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{e.summary}</p>
+              <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                {e.summary}
+              </p>
               <div className="mt-4 flex items-center justify-between">
                 <span className="font-bold">₹{(e.price / 100).toFixed(2)}</span>
                 <span className="text-sm text-primary">Buy ticket →</span>

@@ -1,12 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { loadRazorpay, openRazorpayCheckout } from "@/lib/razorpay";
-import type { ConfirmPaymentRequest, CreateOrderRequest, CreateOrderResponse, Ticket } from "@shared/api";
+import type {
+  ConfirmPaymentRequest,
+  CreateOrderRequest,
+  CreateOrderResponse,
+  Ticket,
+} from "@shared/api";
 import { sampleEvents } from "@/components/sections/EventsPreview";
 
 export default function EventDetails() {
   const { id } = useParams<{ id: string }>();
-  const event = useMemo(() => sampleEvents.find((e) => e.id === id) ?? sampleEvents[0], [id]);
+  const event = useMemo(
+    () => sampleEvents.find((e) => e.id === id) ?? sampleEvents[0],
+    [id],
+  );
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,7 +40,9 @@ export default function EventDetails() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      const json = (await res.json()) as CreateOrderResponse | { error: string };
+      const json = (await res.json()) as
+        | CreateOrderResponse
+        | { error: string };
       if (!res.ok || (json as any).error) {
         throw new Error((json as any).error || "Order creation failed");
       }
@@ -55,15 +65,25 @@ export default function EventDetails() {
               razorpay_signature: response.razorpay_signature,
               email,
               name,
-              event: { id: event.id, title: event.title, date: event.date, price: event.price },
+              event: {
+                id: event.id,
+                title: event.title,
+                date: event.date,
+                price: event.price,
+              },
             };
             const confirmRes = await fetch("/api/razorpay/confirm", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(payload),
             });
-            const data = (await confirmRes.json()) as { ok?: boolean; ticket?: Ticket; error?: string };
-            if (!confirmRes.ok || !data.ok || !data.ticket) throw new Error(data.error || "Confirmation failed");
+            const data = (await confirmRes.json()) as {
+              ok?: boolean;
+              ticket?: Ticket;
+              error?: string;
+            };
+            if (!confirmRes.ok || !data.ok || !data.ticket)
+              throw new Error(data.error || "Confirmation failed");
             setTicket(data.ticket);
           } catch (e: any) {
             setError(e.message);
@@ -83,10 +103,18 @@ export default function EventDetails() {
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           <div className="rounded-xl overflow-hidden border bg-card">
-            <img src={event.image} alt={event.title} className="w-full aspect-[16/8] object-cover" />
+            <img
+              src={event.image}
+              alt={event.title}
+              className="w-full aspect-[16/8] object-cover"
+            />
             <div className="p-6">
-              <div className="text-xs uppercase tracking-wider text-indigo-600 font-semibold">{new Date(event.date).toLocaleString()}</div>
-              <h1 className="mt-2 text-2xl sm:text-3xl font-bold">{event.title}</h1>
+              <div className="text-xs uppercase tracking-wider text-indigo-600 font-semibold">
+                {new Date(event.date).toLocaleString()}
+              </div>
+              <h1 className="mt-2 text-2xl sm:text-3xl font-bold">
+                {event.title}
+              </h1>
               <p className="mt-3 text-muted-foreground">{event.summary}</p>
             </div>
           </div>
@@ -95,7 +123,9 @@ export default function EventDetails() {
           <div className="rounded-xl border p-6 sticky top-24">
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Ticket price</span>
-              <span className="font-bold">₹{(event.price / 100).toFixed(2)}</span>
+              <span className="font-bold">
+                ₹{(event.price / 100).toFixed(2)}
+              </span>
             </div>
             <div className="mt-6 space-y-4">
               <input
@@ -123,15 +153,34 @@ export default function EventDetails() {
             </div>
             {ticket && (
               <div className="mt-8 rounded-lg border bg-card p-4">
-                <div className="text-xs uppercase tracking-wider text-green-600 font-semibold">Purchase successful</div>
+                <div className="text-xs uppercase tracking-wider text-green-600 font-semibold">
+                  Purchase successful
+                </div>
                 <h3 className="mt-1 font-semibold">Your Ticket</h3>
                 <div className="mt-3 text-sm">
-                  <div className="flex items-center justify-between"><span>Ticket ID</span><span className="font-mono">{ticket.id}</span></div>
-                  <div className="flex items-center justify-between mt-1"><span>Event</span><span>{ticket.event.title}</span></div>
-                  <div className="flex items-center justify-between mt-1"><span>Date</span><span>{new Date(ticket.event.date).toLocaleString()}</span></div>
-                  <div className="flex items-center justify-between mt-1"><span>Payment</span><span className="font-mono">{ticket.payment.id}</span></div>
+                  <div className="flex items-center justify-between">
+                    <span>Ticket ID</span>
+                    <span className="font-mono">{ticket.id}</span>
+                  </div>
+                  <div className="flex items-center justify-between mt-1">
+                    <span>Event</span>
+                    <span>{ticket.event.title}</span>
+                  </div>
+                  <div className="flex items-center justify-between mt-1">
+                    <span>Date</span>
+                    <span>{new Date(ticket.event.date).toLocaleString()}</span>
+                  </div>
+                  <div className="flex items-center justify-between mt-1">
+                    <span>Payment</span>
+                    <span className="font-mono">{ticket.payment.id}</span>
+                  </div>
                 </div>
-                <button onClick={() => window.print()} className="mt-4 w-full rounded-md border px-4 py-2 hover:bg-accent">Download / Print</button>
+                <button
+                  onClick={() => window.print()}
+                  className="mt-4 w-full rounded-md border px-4 py-2 hover:bg-accent"
+                >
+                  Download / Print
+                </button>
               </div>
             )}
           </div>

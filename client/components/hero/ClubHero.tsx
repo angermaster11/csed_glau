@@ -32,12 +32,13 @@ function Particles() {
   return (
     <points ref={ref}>
       <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial size={0.02} color={new THREE.Color("#7c3aed")} sizeAttenuation />
+      <pointsMaterial
+        size={0.02}
+        color={new THREE.Color("#7c3aed")}
+        sizeAttenuation
+      />
     </points>
   );
 }
@@ -49,7 +50,12 @@ export default function ClubHero() {
         <ambientLight intensity={0.6} />
         <directionalLight position={[3, 5, 2]} intensity={1.2} />
         <Particles />
-        <OrbitControls enablePan={false} enableZoom={false} autoRotate autoRotateSpeed={0.5} />
+        <OrbitControls
+          enablePan={false}
+          enableZoom={false}
+          autoRotate
+          autoRotateSpeed={0.5}
+        />
       </Canvas>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/10 via-background/40 to-background" />
       <div className="absolute inset-0 flex items-center justify-center">
@@ -61,11 +67,23 @@ export default function ClubHero() {
             CSED Club
           </h1>
           <p className="mt-4 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Ignite innovation, build projects, and lead with entrepreneurial spirit. Join events, showcase projects, and be part of our vibrant community.
+            Ignite innovation, build projects, and lead with entrepreneurial
+            spirit. Join events, showcase projects, and be part of our vibrant
+            community.
           </p>
           <div className="mt-8 flex items-center justify-center gap-4">
-            <a href="#events" className="pointer-events-auto inline-flex items-center rounded-md bg-primary px-5 py-3 text-primary-foreground hover:bg-primary/90 transition">Explore Events</a>
-            <a href="#projects" className="pointer-events-auto inline-flex items-center rounded-md border px-5 py-3 hover:bg-accent transition">View Projects</a>
+            <a
+              href="#events"
+              className="pointer-events-auto inline-flex items-center rounded-md bg-primary px-5 py-3 text-primary-foreground hover:bg-primary/90 transition"
+            >
+              Explore Events
+            </a>
+            <a
+              href="#projects"
+              className="pointer-events-auto inline-flex items-center rounded-md border px-5 py-3 hover:bg-accent transition"
+            >
+              View Projects
+            </a>
           </div>
         </div>
       </div>

@@ -90,15 +90,21 @@ function verifySignature(
 
 export const handleConfirmPayment: RequestHandler = async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, email, name, event } =
-      req.body as {
-        razorpay_order_id: string;
-        razorpay_payment_id: string;
-        razorpay_signature: string;
-        email: string;
-        name: string;
-        event: { id: string; title: string; date: string; price: number };
-      };
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      email,
+      name,
+      event,
+    } = req.body as {
+      razorpay_order_id: string;
+      razorpay_payment_id: string;
+      razorpay_signature: string;
+      email: string;
+      name: string;
+      event: { id: string; title: string; date: string; price: number };
+    };
 
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
     if (!keySecret) {
@@ -168,6 +174,8 @@ export const handleConfirmPayment: RequestHandler = async (req, res) => {
 
     res.status(200).json({ ok: true, ticket });
   } catch (err: any) {
-    res.status(500).json({ error: err?.message || "Payment confirmation failed" });
+    res
+      .status(500)
+      .json({ error: err?.message || "Payment confirmation failed" });
   }
 };
