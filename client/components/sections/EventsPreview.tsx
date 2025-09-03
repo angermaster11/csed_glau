@@ -11,20 +11,25 @@ export type EventCard = {
   image: string;
 };
 
-
 function mapApiToCard(e: ApiEvent): EventCard {
   return {
     id: e._id,
     title: e.title,
     date: `${e.date} ${e.time}`,
-    price: (e as any).amount != null ? Number((e as any).amount) * 100 : undefined,
+    price:
+      (e as any).amount != null ? Number((e as any).amount) * 100 : undefined,
     summary: e.summary || e.description,
-    image: e.banner || "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1600&auto=format&fit=crop",
+    image:
+      e.banner ||
+      "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1600&auto=format&fit=crop",
   };
 }
 
 export default function EventsPreview() {
-  const { data } = useQuery({ queryKey: ["events","preview"], queryFn: fetchEvents });
+  const { data } = useQuery({
+    queryKey: ["events", "preview"],
+    queryFn: fetchEvents,
+  });
   const list = Array.isArray(data) ? data : [];
   const events: EventCard[] = list.map(mapApiToCard);
   return (
@@ -45,7 +50,9 @@ export default function EventsPreview() {
       </div>
       <div className="overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {events.length === 0 ? (
-          <div className="text-sm text-muted-foreground">No events to show.</div>
+          <div className="text-sm text-muted-foreground">
+            No events to show.
+          </div>
         ) : (
           <div className="flex gap-6 snap-x snap-mandatory">
             {events.map((e) => (
@@ -71,7 +78,9 @@ export default function EventsPreview() {
                   </p>
                   {e.price != null && (
                     <div className="mt-4 flex items-center justify-between">
-                      <span className="font-bold">₹{(e.price / 100).toFixed(2)}</span>
+                      <span className="font-bold">
+                        ₹{(e.price / 100).toFixed(2)}
+                      </span>
                       <span className="text-sm text-primary">Buy ticket →</span>
                     </div>
                   )}

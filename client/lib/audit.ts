@@ -23,7 +23,11 @@ export function getAudits(): AuditItem[] {
 
 export function recordAudit(item: Omit<AuditItem, "id" | "ts">) {
   const list = getAudits();
-  list.unshift({ id: crypto.randomUUID(), ts: new Date().toISOString(), ...item });
+  list.unshift({
+    id: crypto.randomUUID(),
+    ts: new Date().toISOString(),
+    ...item,
+  });
   localStorage.setItem(KEY, JSON.stringify(list.slice(0, 200)));
 }
 

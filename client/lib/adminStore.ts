@@ -1,4 +1,9 @@
-export type AdminUser = { name: string; email?: string; id?: string; roll?: string };
+export type AdminUser = {
+  name: string;
+  email?: string;
+  id?: string;
+  roll?: string;
+};
 
 export type Member = {
   id: string;

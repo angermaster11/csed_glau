@@ -1,6 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AdminUser, DashboardState, loadState, getCurrentUser, setCurrentUser, addOrder, Member, Project, ClubEvent } from "@/lib/adminStore";
+import {
+  AdminUser,
+  DashboardState,
+  loadState,
+  getCurrentUser,
+  setCurrentUser,
+  addOrder,
+  Member,
+  Project,
+  ClubEvent,
+} from "@/lib/adminStore";
 import AdminEvents from "@/pages/AdminEvents";
 import AdminProjects from "@/pages/AdminProjects";
 import AdminMembers from "@/pages/AdminMembers";
@@ -72,14 +82,28 @@ export default function AdminDashboard() {
 
   const actor = user?.name || "Unknown";
 
-  const [counts, setCounts] = useState({ members: 0, projects: 0, events: 0, buyers: 0 });
+  const [counts, setCounts] = useState({
+    members: 0,
+    projects: 0,
+    events: 0,
+    buyers: 0,
+  });
   const [audits, setAudits] = useState<AuditItem[]>([]);
 
   useEffect(() => {
     (async () => {
       try {
-        const [m, p, e] = await Promise.all([fetchMembers(), fetchProjects(), fetchEvents()]);
-        setCounts({ members: m.length, projects: p.length, events: e.length, buyers: 0 });
+        const [m, p, e] = await Promise.all([
+          fetchMembers(),
+          fetchProjects(),
+          fetchEvents(),
+        ]);
+        setCounts({
+          members: m.length,
+          projects: p.length,
+          events: e.length,
+          buyers: 0,
+        });
       } catch {}
       setAudits(getAudits());
     })();
@@ -289,20 +313,48 @@ export default function AdminDashboard() {
 
       {tab === "audits" && (
         <div className="mt-6">
-          <SectionCard title="Audit Log" action={<button className="rounded-md border px-3 py-1" onClick={() => { clearAudits(); setAudits([]); }}>Clear</button>}>
+          <SectionCard
+            title="Audit Log"
+            action={
+              <button
+                className="rounded-md border px-3 py-1"
+                onClick={() => {
+                  clearAudits();
+                  setAudits([]);
+                }}
+              >
+                Clear
+              </button>
+            }
+          >
             <div className="space-y-3">
               {audits.length === 0 && (
-                <div className="text-sm text-muted-foreground">No changes yet.</div>
+                <div className="text-sm text-muted-foreground">
+                  No changes yet.
+                </div>
               )}
               {audits.map((a) => (
-                <div key={a.id} className="rounded-md border p-3 flex items-center justify-between">
+                <div
+                  key={a.id}
+                  className="rounded-md border p-3 flex items-center justify-between"
+                >
                   <div>
                     <div className="text-sm">
-                      <span className="font-medium">{a.actor || "admin"}</span> {a.action} {a.entity} <span className="text-xs text-muted-foreground">({a.entityId || ""})</span>
+                      <span className="font-medium">{a.actor || "admin"}</span>{" "}
+                      {a.action} {a.entity}{" "}
+                      <span className="text-xs text-muted-foreground">
+                        ({a.entityId || ""})
+                      </span>
                     </div>
-                    {a.details && <div className="text-xs text-muted-foreground mt-1">{a.details}</div>}
+                    {a.details && (
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {a.details}
+                      </div>
+                    )}
                   </div>
-                  <div className="text-xs text-muted-foreground">{new Date(a.ts).toLocaleString()}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {new Date(a.ts).toLocaleString()}
+                  </div>
                 </div>
               ))}
             </div>

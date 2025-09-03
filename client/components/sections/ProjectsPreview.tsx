@@ -13,7 +13,10 @@ function mapToCard(p: ApiProject) {
 }
 
 export default function ProjectsPreview() {
-  const { data } = useQuery<ApiProject[]>({ queryKey: ["projects", "preview"], queryFn: fetchProjects });
+  const { data } = useQuery<ApiProject[]>({
+    queryKey: ["projects", "preview"],
+    queryFn: fetchProjects,
+  });
   const list = Array.isArray(data) ? data.map(mapToCard) : [];
 
   return (
@@ -24,7 +27,9 @@ export default function ProjectsPreview() {
       </p>
       <div className="mt-8 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {list.length === 0 ? (
-          <div className="text-sm text-muted-foreground">No projects to show.</div>
+          <div className="text-sm text-muted-foreground">
+            No projects to show.
+          </div>
         ) : (
           <div className="flex gap-6 snap-x snap-mandatory">
             {list.map((p) => (
@@ -34,11 +39,19 @@ export default function ProjectsPreview() {
                 className="min-w-[300px] sm:min-w-[360px] max-w-[420px] snap-start rounded-xl border bg-card hover:shadow-lg transition overflow-hidden"
               >
                 <div className="aspect-[16/10] overflow-hidden">
-                  {p.image && <img src={p.image} alt={p.title} className="h-full w-full object-cover hover:scale-105 transition duration-500" />}
+                  {p.image && (
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      className="h-full w-full object-cover hover:scale-105 transition duration-500"
+                    />
+                  )}
                 </div>
                 <div className="p-5">
                   <h3 className="font-semibold text-lg">{p.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{p.description}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {p.description}
+                  </p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {p.tech.map((t) => (
                       <span

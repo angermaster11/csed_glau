@@ -15,7 +15,12 @@ export default function EventDetails() {
     enabled: Boolean(id),
   });
 
-  const [buyer, setBuyer] = useState({ name: "", email: "", phone: "", designation: "" });
+  const [buyer, setBuyer] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    designation: "",
+  });
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -23,8 +28,10 @@ export default function EventDetails() {
     loadRazorpay().catch(() => {});
   }, [id, refetch]);
 
-  if (isLoading) return <div className="container mx-auto py-12">Loading...</div>;
-  if (error || !data) return <div className="container mx-auto py-12">Event not found</div>;
+  if (isLoading)
+    return <div className="container mx-auto py-12">Loading...</div>;
+  if (error || !data)
+    return <div className="container mx-auto py-12">Event not found</div>;
 
   const event = data;
 
@@ -35,7 +42,9 @@ export default function EventDetails() {
     }
     try {
       setSubmitting(true);
-      const rupees = (event as any).amount ? Math.max(1, Number((event as any).amount)) : 1;
+      const rupees = (event as any).amount
+        ? Math.max(1, Number((event as any).amount))
+        : 1;
       const order = await createTicketOrder(event._id, {
         name: buyer.name,
         email: buyer.email,
@@ -55,18 +64,30 @@ export default function EventDetails() {
         theme: { color: "#4f46e5" },
         handler: async (resp) => {
           try {
-            const result = await verifyPayment(resp.razorpay_payment_id, resp.razorpay_order_id, resp.razorpay_signature);
+            const result = await verifyPayment(
+              resp.razorpay_payment_id,
+              resp.razorpay_order_id,
+              resp.razorpay_signature,
+            );
             toast({ title: "Payment success", description: result.message });
             setBuyer({ name: "", email: "", phone: "", designation: "" });
           } catch (e: any) {
-            toast({ title: "Verification failed", description: e?.message || "Try again", variant: "destructive" });
+            toast({
+              title: "Verification failed",
+              description: e?.message || "Try again",
+              variant: "destructive",
+            });
           } finally {
             setSubmitting(false);
           }
         },
       });
     } catch (e: any) {
-      toast({ title: "Booking failed", description: e?.response?.data?.detail || e?.message || "Try again", variant: "destructive" });
+      toast({
+        title: "Booking failed",
+        description: e?.response?.data?.detail || e?.message || "Try again",
+        variant: "destructive",
+      });
       setSubmitting(false);
     }
   };
@@ -108,11 +129,38 @@ export default function EventDetails() {
           <div className="rounded-xl border p-6">
             <h3 className="font-semibold">Book this event</h3>
             <div className="mt-4 space-y-3">
-              <input className="w-full rounded-md border bg-background px-3 py-2" placeholder="Full name" value={buyer.name} onChange={(e) => setBuyer({ ...buyer, name: e.target.value })} />
-              <input className="w-full rounded-md border bg-background px-3 py-2" placeholder="Email" type="email" value={buyer.email} onChange={(e) => setBuyer({ ...buyer, email: e.target.value })} />
-              <input className="w-full rounded-md border bg-background px-3 py-2" placeholder="Phone" value={buyer.phone} onChange={(e) => setBuyer({ ...buyer, phone: e.target.value })} />
-              <input className="w-full rounded-md border bg-background px-3 py-2" placeholder="Designation" value={buyer.designation} onChange={(e) => setBuyer({ ...buyer, designation: e.target.value })} />
-              <button onClick={handleBook} disabled={submitting} className="w-full rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 disabled:opacity-60">
+              <input
+                className="w-full rounded-md border bg-background px-3 py-2"
+                placeholder="Full name"
+                value={buyer.name}
+                onChange={(e) => setBuyer({ ...buyer, name: e.target.value })}
+              />
+              <input
+                className="w-full rounded-md border bg-background px-3 py-2"
+                placeholder="Email"
+                type="email"
+                value={buyer.email}
+                onChange={(e) => setBuyer({ ...buyer, email: e.target.value })}
+              />
+              <input
+                className="w-full rounded-md border bg-background px-3 py-2"
+                placeholder="Phone"
+                value={buyer.phone}
+                onChange={(e) => setBuyer({ ...buyer, phone: e.target.value })}
+              />
+              <input
+                className="w-full rounded-md border bg-background px-3 py-2"
+                placeholder="Designation"
+                value={buyer.designation}
+                onChange={(e) =>
+                  setBuyer({ ...buyer, designation: e.target.value })
+                }
+              />
+              <button
+                onClick={handleBook}
+                disabled={submitting}
+                className="w-full rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+              >
                 {submitting ? "Booking..." : "Book"}
               </button>
             </div>
@@ -124,16 +172,24 @@ export default function EventDetails() {
               {(event.speakers || []).map((s) => (
                 <div key={s.id} className="flex items-center gap-3">
                   {s.image && (
-                    <img src={s.image} alt={s.name} className="h-12 w-12 rounded-full object-cover border" />
+                    <img
+                      src={s.image}
+                      alt={s.name}
+                      className="h-12 w-12 rounded-full object-cover border"
+                    />
                   )}
                   <div>
                     <div className="font-medium leading-tight">{s.name}</div>
-                    <div className="text-xs text-muted-foreground">{s.title} • {s.company}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {s.title} • {s.company}
+                    </div>
                   </div>
                 </div>
               ))}
               {(!event.speakers || event.speakers.length === 0) && (
-                <div className="text-sm text-muted-foreground">No speakers added.</div>
+                <div className="text-sm text-muted-foreground">
+                  No speakers added.
+                </div>
               )}
             </div>
           </div>

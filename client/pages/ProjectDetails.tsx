@@ -15,8 +15,10 @@ export default function ProjectDetails() {
     if (id) refetch();
   }, [id, refetch]);
 
-  if (isLoading) return <div className="container mx-auto py-12">Loading...</div>;
-  if (error || !data) return <div className="container mx-auto py-12">Project not found</div>;
+  if (isLoading)
+    return <div className="container mx-auto py-12">Loading...</div>;
+  if (error || !data)
+    return <div className="container mx-auto py-12">Project not found</div>;
 
   const p = data;
 
@@ -40,11 +42,18 @@ export default function ProjectDetails() {
                 {p.project_name}
               </h1>
               {p.project_summary && (
-                <p className="mt-3 text-muted-foreground">{p.project_summary}</p>
+                <p className="mt-3 text-muted-foreground">
+                  {p.project_summary}
+                </p>
               )}
               <div className="mt-4 flex flex-wrap gap-2">
                 {(p.techStacks || []).map((t) => (
-                  <span key={t} className="text-xs rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300 px-2 py-1 border border-indigo-200/60 dark:border-indigo-500/20">{t}</span>
+                  <span
+                    key={t}
+                    className="text-xs rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300 px-2 py-1 border border-indigo-200/60 dark:border-indigo-500/20"
+                  >
+                    {t}
+                  </span>
                 ))}
               </div>
               <div className="mt-6 prose prose-sm dark:prose-invert max-w-none">
@@ -60,14 +69,25 @@ export default function ProjectDetails() {
               {(p.who_involved || []).map((m, i) => (
                 <div key={`${m.email}-${i}`} className="rounded-md border p-3">
                   <div className="font-medium leading-tight">{m.name}</div>
-                  <div className="text-xs text-muted-foreground">{m.designation}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {m.designation}
+                  </div>
                   {m.linkedin && (
-                    <a href={m.linkedin} target="_blank" rel="noreferrer" className="text-xs text-indigo-600 mt-1 inline-block">LinkedIn</a>
+                    <a
+                      href={m.linkedin}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs text-indigo-600 mt-1 inline-block"
+                    >
+                      LinkedIn
+                    </a>
                   )}
                 </div>
               ))}
               {(!p.who_involved || p.who_involved.length === 0) && (
-                <div className="text-sm text-muted-foreground">No members listed.</div>
+                <div className="text-sm text-muted-foreground">
+                  No members listed.
+                </div>
               )}
             </div>
           </div>

@@ -35,7 +35,12 @@ export default function AdminLogin() {
       setLoading(true);
       const res = await login(email, password);
       setToken(res.access_token);
-      setCurrentUser({ name: deriveName(email), email, id: res.id, roll: res.roll });
+      setCurrentUser({
+        name: deriveName(email),
+        email,
+        id: res.id,
+        roll: res.roll,
+      });
       navigate("/admin/dashboard");
     } catch (e: any) {
       setError(e?.response?.data?.message || "Invalid credentials");
@@ -47,7 +52,9 @@ export default function AdminLogin() {
   return (
     <div className="container mx-auto max-w-md py-24">
       <h1 className="text-3xl font-bold">Admin Login</h1>
-      <p className="mt-2 text-muted-foreground">Sign in with your admin account.</p>
+      <p className="mt-2 text-muted-foreground">
+        Sign in with your admin account.
+      </p>
 
       <div className="mt-6 space-y-4">
         <div className="relative">
@@ -76,7 +83,11 @@ export default function AdminLogin() {
             className="absolute right-2 top-2 p-1 rounded hover:bg-accent"
             aria-label={show ? "Hide password" : "Show password"}
           >
-            {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {show ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
           </button>
         </div>
 
