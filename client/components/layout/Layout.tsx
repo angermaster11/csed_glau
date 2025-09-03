@@ -37,6 +37,7 @@ function Header() {
           <Link to="/events" className="hover:text-primary transition-colors">
             All Events
           </Link>
+          <ThemeToggle />
           <Link
             to="/admin"
             className={cn(
