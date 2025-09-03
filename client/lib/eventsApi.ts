@@ -27,8 +27,16 @@ export type ApiEvent = {
 };
 
 export async function fetchEvents(): Promise<ApiEvent[]> {
-  const res = await fetch(`${BASE_URL}/api/events/events`, { method: "GET" });
+  const res = await fetch(`${BASE_URL}/api/events/events`, {
+    method: "GET",
+    headers: {
+      "ngrok-skip-browser-warning": "true",
+      Accept: "application/json",
+    },
+  });
   if (!res.ok) return [];
+  const ct = res.headers.get("content-type") || "";
+  if (!ct.includes("application/json")) return [];
   const data = await res.json();
   if (Array.isArray(data)) return data as ApiEvent[];
   if (data && Array.isArray((data as any).events)) return (data as any).events as ApiEvent[];
@@ -36,8 +44,16 @@ export async function fetchEvents(): Promise<ApiEvent[]> {
 }
 
 export async function fetchEvent(id: string): Promise<ApiEvent> {
-  const res = await fetch(`${BASE_URL}/api/events/events/${id}`, { method: "GET" });
+  const res = await fetch(`${BASE_URL}/api/events/events/${id}`, {
+    method: "GET",
+    headers: {
+      "ngrok-skip-browser-warning": "true",
+      Accept: "application/json",
+    },
+  });
   if (!res.ok) throw new Error("Failed to fetch event");
+  const ct = res.headers.get("content-type") || "";
+  if (!ct.includes("application/json")) throw new Error("Invalid response");
   return (await res.json()) as ApiEvent;
 }
 
