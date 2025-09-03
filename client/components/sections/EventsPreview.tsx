@@ -17,6 +17,7 @@ function mapApiToCard(e: ApiEvent): EventCard {
     id: e._id,
     title: e.title,
     date: `${e.date} ${e.time}`,
+    price: (e as any).amount != null ? Number((e as any).amount) * 100 : undefined,
     summary: e.summary || e.description,
     image: e.banner || "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1600&auto=format&fit=crop",
   };
