@@ -26,15 +26,7 @@ const App = () => (
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
-            <Route
-              path="/events"
-              element={
-                <Placeholder
-                  title="Events"
-                  description="Browse all club events."
-                />
-              }
-            />
+            <Route path="/events" element={<EventsList />} />
             <Route path="/events/:id" element={<EventDetails />} />
             <Route
               path="/projects"
