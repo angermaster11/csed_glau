@@ -272,111 +272,14 @@ export default function AdminDashboard() {
       )}
 
       {tab === "projects" && (
-        <div className="mt-6 grid gap-6 lg:grid-cols-3">
-          <SectionCard title="Add Project">
-            <div className="space-y-3">
-              <input
-                className="w-full rounded-md border bg-background px-3 py-2"
-                placeholder="Title"
-                value={projectForm.title || ""}
-                onChange={(e) =>
-                  setProjectForm({ ...projectForm, title: e.target.value })
-                }
-              />
-              <textarea
-                className="w-full rounded-md border bg-background px-3 py-2"
-                placeholder="Description"
-                value={projectForm.description || ""}
-                onChange={(e) =>
-                  setProjectForm({
-                    ...projectForm,
-                    description: e.target.value,
-                  })
-                }
-              />
-              <input
-                className="w-full rounded-md border bg-background px-3 py-2"
-                placeholder="Tech (comma separated)"
-                value={(projectForm.tech || []).join(", ")}
-                onChange={(e) =>
-                  setProjectForm({
-                    ...projectForm,
-                    tech: e.target.value.split(/,\s*/).filter(Boolean),
-                  })
-                }
-              />
-              <div className="flex gap-2">
-                <button
-                  className="rounded-md bg-primary px-4 py-2 text-primary-foreground"
-                  onClick={() => {
-                    if (!projectForm.title || !projectForm.description) return;
-                    const s = { ...state };
-                    addProject(s, actor, {
-                      title: projectForm.title!,
-                      description: projectForm.description!,
-                      tech: projectForm.tech || [],
-                    });
-                    setState(s);
-                    resetForms();
-                  }}
-                >
-                  Add
-                </button>
-                <button
-                  className="rounded-md border px-4 py-2"
-                  onClick={resetForms}
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-          </SectionCard>
-
-          <div className="lg:col-span-2">
-            <SectionCard title="Projects List">
-              <div className="grid gap-4">
-                {state.projects.map((p) => (
-                  <div
-                    key={p.id}
-                    className="rounded-lg border p-4 flex items-start justify-between"
-                  >
-                    <div>
-                      <div className="font-semibold">{p.title}</div>
-                      <div className="text-sm text-muted-foreground mt-1">
-                        {p.description}
-                      </div>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {p.tech.map((t) => (
-                          <Tag key={t}>{t}</Tag>
-                        ))}
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        added by {p.createdBy}
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        className="rounded-md border px-3 py-1"
-                        onClick={() => setProjectForm(p)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="rounded-md border px-3 py-1 hover:bg-red-50 text-red-600"
-                        onClick={() => {
-                          const s = { ...state };
-                          deleteProject(s, actor, p.id);
-                          setState(s);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </SectionCard>
-          </div>
+        <div className="mt-6">
+          {/* Backend-powered Projects manager */}
+          {/**/}
+          {/* Replace legacy local-state projects UI with API-backed page */}
+          {/* The page handles its own layout (form left, list right) */}
+          {/* eslint-disable-next-line react/jsx-no-undef */}
+          {/**/}
+          <AdminProjects />
         </div>
       )}
 
