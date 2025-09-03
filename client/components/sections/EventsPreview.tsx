@@ -11,18 +11,6 @@ export type EventCard = {
   image: string;
 };
 
-export const sampleEvents: EventCard[] = [
-  {
-    id: "ignite-2025",
-    title: "Ignite 2025: Startup Hackathon",
-    date: "2025-11-16",
-    price: 49900,
-    summary:
-      "48-hour hackathon to build and pitch startup ideas with mentors and prizes.",
-    image:
-      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1600&auto=format&fit=crop",
-  },
-];
 
 function mapApiToCard(e: ApiEvent): EventCard {
   return {
@@ -37,7 +25,7 @@ function mapApiToCard(e: ApiEvent): EventCard {
 export default function EventsPreview() {
   const { data } = useQuery({ queryKey: ["events","preview"], queryFn: fetchEvents });
   const list = Array.isArray(data) ? data : [];
-  const events: EventCard[] = list.length > 0 ? list.map(mapApiToCard) : sampleEvents;
+  const events: EventCard[] = list.map(mapApiToCard);
   return (
     <section id="events" className="container mx-auto py-16 md:py-24">
       <div className="flex items-end justify-between mb-8">
@@ -71,7 +59,7 @@ export default function EventsPreview() {
               </div>
               <div className="p-4">
                 <div className="text-xs uppercase tracking-wider text-indigo-600 font-semibold">
-                  {new Date(e.date).toLocaleString()}
+                  {e.date}
                 </div>
                 <h3 className="mt-1 font-semibold">{e.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
