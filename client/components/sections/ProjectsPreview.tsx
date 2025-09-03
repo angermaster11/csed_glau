@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProjects, type ApiProject } from "@/lib/projectsApi";
 
@@ -27,8 +28,9 @@ export default function ProjectsPreview() {
         ) : (
           <div className="flex gap-6 snap-x snap-mandatory">
             {list.map((p) => (
-              <div
+              <Link
                 key={p.id}
+                to={`/projects/${p.id}`}
                 className="min-w-[300px] sm:min-w-[360px] max-w-[420px] snap-start rounded-xl border bg-card hover:shadow-lg transition overflow-hidden"
               >
                 <div className="aspect-[16/10] overflow-hidden">
@@ -48,7 +50,7 @@ export default function ProjectsPreview() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

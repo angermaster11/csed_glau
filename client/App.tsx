@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import Layout from "@/components/layout/Layout";
 import Placeholder from "@/pages/Placeholder";
 import EventDetails from "@/pages/EventDetails";
+import ProjectDetails from "@/pages/ProjectDetails";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import EventsList from "@/pages/EventsList";
@@ -38,6 +39,7 @@ const App = () => (
                 />
               }
             />
+            <Route path="/projects/:id" element={<ProjectDetails />} />
             <Route
               path="/members"
               element={
