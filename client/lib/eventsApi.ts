@@ -1,4 +1,4 @@
-import { api } from "@/lib/api";
+import { api, BASE_URL } from "@/lib/api";
 
 export type ApiSpeaker = {
   id: string;
@@ -27,15 +27,18 @@ export type ApiEvent = {
 };
 
 export async function fetchEvents(): Promise<ApiEvent[]> {
-  const { data } = await api.get("/api/events/events");
+  const res = await fetch(`${BASE_URL}/api/events/events`, { method: "GET" });
+  if (!res.ok) return [];
+  const data = await res.json();
   if (Array.isArray(data)) return data as ApiEvent[];
   if (data && Array.isArray((data as any).events)) return (data as any).events as ApiEvent[];
   return [];
 }
 
 export async function fetchEvent(id: string): Promise<ApiEvent> {
-  const { data } = await api.get<ApiEvent>(`/api/events/events/${id}`);
-  return data;
+  const res = await fetch(`${BASE_URL}/api/events/events/${id}`, { method: "GET" });
+  if (!res.ok) throw new Error("Failed to fetch event");
+  return (await res.json()) as ApiEvent;
 }
 
 export type UpsertEventInput = {
