@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setCurrentUser } from "@/lib/adminStore";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { login, setToken } from "@/lib/api";
 
 function deriveName(email: string) {
   const base = email.split("@")[0] || "admin";
@@ -17,25 +18,36 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const validEmail = /.+@.+\..+/.test(email);
   const validPass = password.length >= 6;
-  const isValid = validEmail && validPass;
+  const isValid = validEmail && validPass && !loading;
 
-  const onSubmit = () => {
-    if (!isValid) {
-      setError("Enter a valid email and at least 6 character password.");
-      return;
+  const onSubmit = async () => {
+    try {
+      setError(null);
+      if (!isValid) {
+        setError("Enter a valid email and at least 6 character password.");
+        return;
+      }
+      setLoading(true);
+      const res = await login(email, password);
+      setToken(res.access_token);
+      setCurrentUser({ name: deriveName(email), email, id: res.id, roll: res.roll });
+      navigate("/admin/dashboard");
+    } catch (e: any) {
+      setError(e?.response?.data?.message || "Invalid credentials");
+    } finally {
+      setLoading(false);
     }
-    setCurrentUser({ name: deriveName(email), email });
-    navigate("/admin/dashboard");
   };
 
   return (
     <div className="container mx-auto max-w-md py-24">
       <h1 className="text-3xl font-bold">Admin Login</h1>
-      <p className="mt-2 text-muted-foreground">Sign in with email and password (UI only). Hook your backend later.</p>
+      <p className="mt-2 text-muted-foreground">Sign in with your admin account.</p>
 
       <div className="mt-6 space-y-4">
         <div className="relative">
@@ -75,7 +87,7 @@ export default function AdminLogin() {
           disabled={!isValid}
           onClick={onSubmit}
         >
-          Sign in
+          {loading ? "Signing in..." : "Sign in"}
         </button>
       </div>
     </div>
