@@ -20,6 +20,7 @@ import {
   Project,
   ClubEvent,
 } from "@/lib/adminStore";
+import AdminEvents from "@/pages/AdminEvents";
 
 function SectionCard({
   title,
@@ -380,141 +381,8 @@ export default function AdminDashboard() {
       )}
 
       {tab === "events" && (
-        <div className="mt-6 grid gap-6 lg:grid-cols-3">
-          <SectionCard title="Add Event">
-            <div className="space-y-3">
-              <input
-                className="w-full rounded-md border bg-background px-3 py-2"
-                placeholder="Title"
-                value={eventForm.title || ""}
-                onChange={(e) =>
-                  setEventForm({ ...eventForm, title: e.target.value })
-                }
-              />
-              <input
-                className="w-full rounded-md border bg-background px-3 py-2"
-                placeholder="Date (YYYY-MM-DD)"
-                value={eventForm.date || ""}
-                onChange={(e) =>
-                  setEventForm({ ...eventForm, date: e.target.value })
-                }
-              />
-              <input
-                className="w-full rounded-md border bg-background px-3 py-2"
-                placeholder="Price (₹)"
-                value={
-                  eventForm.price != null
-                    ? (eventForm.price / 100).toString()
-                    : ""
-                }
-                onChange={(e) =>
-                  setEventForm({
-                    ...eventForm,
-                    price: Math.round(parseFloat(e.target.value || "0") * 100),
-                  })
-                }
-              />
-              <input
-                className="w-full rounded-md border bg-background px-3 py-2"
-                placeholder="Image URL"
-                value={eventForm.image || ""}
-                onChange={(e) =>
-                  setEventForm({ ...eventForm, image: e.target.value })
-                }
-              />
-              <textarea
-                className="w-full rounded-md border bg-background px-3 py-2"
-                placeholder="Summary"
-                value={eventForm.summary || ""}
-                onChange={(e) =>
-                  setEventForm({ ...eventForm, summary: e.target.value })
-                }
-              />
-              <div className="flex gap-2">
-                <button
-                  className="rounded-md bg-primary px-4 py-2 text-primary-foreground"
-                  onClick={() => {
-                    if (
-                      !eventForm.title ||
-                      !eventForm.date ||
-                      !eventForm.summary ||
-                      eventForm.price == null
-                    )
-                      return;
-                    const s = { ...state };
-                    addEvent(s, actor, {
-                      title: eventForm.title!,
-                      date: eventForm.date!,
-                      price: eventForm.price!,
-                      image: eventForm.image,
-                      summary: eventForm.summary!,
-                    });
-                    setState(s);
-                    resetForms();
-                  }}
-                >
-                  Add
-                </button>
-                <button
-                  className="rounded-md border px-4 py-2"
-                  onClick={resetForms}
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-          </SectionCard>
-
-          <div className="lg:col-span-2">
-            <SectionCard title="Events List">
-              <div className="grid gap-4">
-                {state.events.map((e) => (
-                  <div
-                    key={e.id}
-                    className="rounded-lg border p-4 flex items-start justify-between"
-                  >
-                    <div className="flex gap-3">
-                      {e.image && (
-                        <img
-                          src={e.image}
-                          className="h-16 w-24 rounded object-cover"
-                        />
-                      )}
-                      <div>
-                        <div className="font-semibold">{e.title}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {new Date(e.date).toLocaleDateString()} • ₹
-                          {(e.price / 100).toFixed(2)}
-                        </div>
-                        <div className="text-sm mt-1">{e.summary}</div>
-                        <div className="text-xs text-muted-foreground mt-1">
-                          added by {e.createdBy}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        className="rounded-md border px-3 py-1"
-                        onClick={() => setEventForm(e)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="rounded-md border px-3 py-1 hover:bg-red-50 text-red-600"
-                        onClick={() => {
-                          const s = { ...state };
-                          deleteEvent(s, actor, e.id);
-                          setState(s);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </SectionCard>
-          </div>
+        <div className="mt-6">
+          <AdminEvents />
         </div>
       )}
 
