@@ -46,8 +46,13 @@ export default function AdminMembers() {
       setError(null);
       if (!form.name || !form.email) { setError("Name and email required"); return; }
       const payload = { ...form } as any;
-      if (editingId) await updateMemberApi(editingId, payload);
-      else await createMember(payload);
+      if (editingId) {
+        await updateMemberApi(editingId, payload);
+        try { (await import("@/lib/audit")).recordAudit({ action: "update", entity: "member", entityId: editingId, details: `Updated ${form.name}` }); } catch {}
+      } else {
+        const res = await createMember(payload);
+        try { (await import("@/lib/audit")).recordAudit({ action: "create", entity: "member", entityId: (res as any)?.id, details: `Created ${form.name}` }); } catch {}
+      }
       setMembers(await fetchMembers());
       resetForm();
     } catch (e: any) {
@@ -124,7 +129,7 @@ export default function AdminMembers() {
               </div>
               <div className="flex gap-2">
                 <button className="rounded-md border px-3 py-1" onClick={() => handleEdit(m._id)}>Edit</button>
-                <button className="rounded-md border px-3 py-1 hover:bg-red-50 text-red-600" onClick={async () => { if (!confirm("Delete this member?")) return; await deleteMemberApi(m._id); setMembers(await fetchMembers()); }}>Delete</button>
+                <button className="rounded-md border px-3 py-1 hover:bg-red-50 text-red-600" onClick={async () => { if (!confirm("Delete this member?")) return; await deleteMemberApi(m._id); try { (await import("@/lib/audit")).recordAudit({ action: "delete", entity: "member", entityId: m._id, details: `Deleted ${m.name}` }); } catch {} setMembers(await fetchMembers()); }}>Delete</button>
               </div>
             </div>
           ))}
